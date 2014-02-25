@@ -5,6 +5,14 @@ require 'sinatra/reloader'
 set :sessions, true
 
 get '/' do
+  if session[:username]
+    redirect '/bet'
+  else
+    redirect '/set_name'
+  end
+end
+
+get '/set_name' do
   erb :set_name
 end
 
@@ -25,15 +33,14 @@ post '/bet' do
 end
 
 get '/game' do
-  
   suits = ['H', 'D', 'S', 'C']
   values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
   session[:deck] = values.product(suits).shuffle!
   session[:player_cards] = []
   session[:dealer_cards] = []
-  session[:player_cards] << session[:deck].pop
   session[:dealer_cards] << session[:deck].pop
   session[:player_cards] << session[:deck].pop
   session[:dealer_cards] << session[:deck].pop
+  session[:player_cards] << session[:deck].pop
   erb :game
 end
