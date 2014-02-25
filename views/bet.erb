@@ -1,0 +1,8 @@
+<h4>Hello <%= session[:username] %>! Place your bet:</h4>
+
+You currently have $<%= session[:bank].to_s %>
+<form action='/bet' method='post'>
+  <input type='text' name='bet_amount'/>
+  <br/>
+  <input type='submit' class='btn'/>
+</form>

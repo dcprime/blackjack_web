@@ -1,0 +1,18 @@
+<h4>Good luck <%= session[:username] %>!</h4>
+
+Your current balance is $<%= session[:bank] %>
+<br/>
+
+Your cards are:
+<ul>
+<% session[:player_cards].each do |card| %>
+  <li><%= card.to_s %></li>
+<% end %>
+</ul>
+
+Dealer cards are:
+<ul>
+  <% session[:dealer_cards].each do |card| %>
+  <li><%= card.to_s %></li>
+<% end %>
+</ul>
