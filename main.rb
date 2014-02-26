@@ -4,6 +4,10 @@ require 'sinatra/reloader'
 
 set :sessions, true
 
+BLACKJACK_AMOUNT = 21
+DEALER_MIN = 17
+START_BALANCE = 500
+
 get '/' do
   if session[:username]
     redirect '/bet'
@@ -22,7 +26,7 @@ post '/set_name' do
 end
 
 get '/bet' do
-  session[:bank] = 500
+  session[:bank] = START_BALANCE
   erb :bet
 end
 
@@ -33,14 +37,19 @@ post '/bet' do
 end
 
 get '/game' do
-  suits = ['H', 'D', 'S', 'C']
-  values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-  session[:deck] = values.product(suits).shuffle!
-  session[:player_cards] = []
-  session[:dealer_cards] = []
-  session[:dealer_cards] << session[:deck].pop
-  session[:player_cards] << session[:deck].pop
-  session[:dealer_cards] << session[:deck].pop
-  session[:player_cards] << session[:deck].pop
+  if !session[:player_cards]
+    suits = ['H', 'D', 'S', 'C']
+    values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+    session[:deck] = values.product(suits).shuffle!
+    session[:player_cards] = []
+    session[:dealer_cards] = []
+    session[:dealer_cards] << session[:deck].pop
+    session[:player_cards] << session[:deck].pop
+    session[:dealer_cards] << session[:deck].pop
+    session[:player_cards] << session[:deck].pop
+  end
+
+
+
   erb :game
 end
