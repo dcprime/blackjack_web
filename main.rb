@@ -30,8 +30,31 @@ helpers do
     @total
   end
 
+  def dealer_2nd_card dealer_cards
+    second_card = dealer_cards[1]
+  end
+
+  def hidden_card
+    value = 0
+    card = dealer_2nd_card(session[:dealer_cards]).to_s
+    if card[2] == "A"
+      value = 11
+    elsif card[2].to_i == 0
+      value = 10
+    else
+      value = card[2].to_i
+    end
+    value
+  end
+
   def busted? cards
     calculate_total(cards) > 21
+  end
+
+  def dealer_sequence cards
+    if calculate_total(cards) < DEALER_MIN
+      session[:dealer_cards] << session[:deck].pop
+    end
   end
 
 # End helpers method declarations
@@ -76,7 +99,13 @@ post '/hit' do
 end
 
 post '/stay' do
+
   # Dealer turn goes here
   redirect '/dealer_turn'
 end
 
+get '/dealer_turn' do
+  dealer_sequence session[:dealer_cards]
+
+  erb :game
+end

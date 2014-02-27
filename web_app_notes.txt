@@ -1,0 +1,70 @@
+
+@player_turn -> Hit and Stay selectable or faded; Dealer cards all visible or one hidden; Dealer next-card button visible (see also dealer_total)
+@player_bust -> Player bust message in Instruction
+@selection - > Play again message on or off
+dealer_total < DEALER_MIN -> Instruction: "Dealer has less than 17. [Click for dealer's next card]
+dealer_total >= DEALER_MIN -> compare
+dealer_total == BLACKJACK_AMOUNT -> compare
+dealer_total > BLACKJACK_AMOUNT -> Instruction: "Dealer busted! You win, #{username}!"
+
+game page versions
+ - Player hit & initial view: @player_turn = true, @player_bust = false, @selection = false, 
+	Dealer cards: (same as above)
+	Dealer total: (same as above)
+	Player cards: (same as above)
+	Player total: (same as above)
+	Player buttons: Hit and Stay
+	Instruction: "Would you like to Hit or Stay, #{username}?
+ - Player bust: @player_turn = false, @player_bust = true, @selection = true
+	Dealer cards: (same as above)
+	Dealer total: (same as above)
+	Player cards: (same as above)
+	Player total: (same as above)
+	Player buttons: Hit and Stay faded and not selectable
+	Instruction: "Sorry #{username}, you busted!" (text in red alert box)
+	Selection: "Would you like to play again?" [Yes] -> Restart [No] -> Goodbye message
+ - Player stay 
+	(redirect to dealer turn)
+ - dealer_total = BLACKJACK_AMOUNT
+	(redirect to compare)
+ - dealer_total > BLACKJACK_AMOUNT: @player_turn = false, @player_bust = false, @selection = true
+	Dealer cards: show full hand
+	Dealer total: total of all cards
+	Player cards: (same as above)
+	Player total: (same as above)
+	Player buttons: Hit and Stay faded and not selectable
+	Instruction: "Dealer busted! You win, #{username}!"
+	Selection: "Would you like to play again?" [Yes] -> Restart [No] -> Goodbye message
+ - Dealer turn (dealer_total >= DEALER_MIN)
+	(redirect to compare)
+ - dealer_total < DEALER_MIN
+	Dealer cards: (same as above)
+	Dealer total: (same as above)
+	Player cards: (same as above)
+	Player total: (same as above)
+	Player buttons: Hit and Stay faded and not selectable
+	Instruction: "Dealer has less than 17. [Click for dealer's next card] -> check total -> redirect
+ - Compare (player_total > dealer_total)
+	Dealer cards: (same as above)
+	Dealer total: (same as above)
+	Player cards: (same as above)
+	Player total: (same as above)
+	Player buttons: Hit and Stay faded and not selectable
+	Instruction: "You win, #{username}!"
+	Selection: "Would you like to play again?" [Yes] -> Restart [No] -> Goodbye message
+ - Compare (dealer_total > player_total)
+	Dealer cards: (same as above)
+	Dealer total: (same as above)
+	Player cards: (same as above)
+	Player total: (same as above)
+	Player buttons: Hit and Stay faded and not selectable
+	Instruction: "Sorry #{username}, you lose!"
+	Selection: "Would you like to play again?" [Yes] -> Restart [No] -> Goodbye message
+ - Compare (dealer_total == player_total)
+	Dealer cards: (same as above)
+	Dealer total: (same as above)
+	Player cards: (same as above)
+	Player total: (same as above)
+	Player buttons: Hit and Stay faded and not selectable
+	Instruction: "It's a tie game, #{username}! Imagine that!"
+	Selection: "Would you like to play again?" [Yes] -> Restart [No] -> Goodbye message

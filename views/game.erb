@@ -11,7 +11,7 @@ Dealer cards are:
   <li><%= card.to_s %></li>
   <% end %>
 </ul>
-Dealer total is: <%= (calculate_total(session[:dealer_cards])).to_s %>
+Dealer total is: <%= ( (calculate_total(session[:dealer_cards])) - (hidden_card)).to_s %>
 
 <br/>
 <br/>
