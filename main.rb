@@ -49,7 +49,44 @@ get '/game' do
     session[:player_cards] << session[:deck].pop
   end
 
+# Player hand value calculation
+arr = session[:player_cards].map{|e| e[0] }
 
+  @player_total = 0
+  arr.each do |value|
+    if value == "A"
+      @player_total += 11
+    elsif value.to_i == 0
+      @player_total += 10
+    else
+      @player_total += value.to_i
+    end
+  end
+
+  #correct for Aces
+  arr.select{|e| e == "A"}.count.times do
+    @player_total -= 10 if @player_total > 21
+  end
+  @player_total
+
+  arr2 = session[:dealer_cards].map{|e| e[0] }
+
+  @dealer_total = 0
+  arr2.each do |value2|
+    if value2 == "A"
+      @dealer_total += 11
+    elsif value2.to_i == 0
+      @dealer_total += 10
+    else
+      @dealer_total += value2.to_i
+    end
+  end
+
+  #correct for Aces
+  arr2.select{|e| e == "A"}.count.times do
+    @dealer_total -= 10 if @dealer_total > 21
+  end
+  @dealer_total
 
   erb :game
 end

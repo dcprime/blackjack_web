@@ -1,6 +1,17 @@
 <h1>Blackjack!</h1>
 <h4>Good luck <%= session[:username] %>!</h4>
 
+Dealer cards are:
+<ul>
+  <% session[:dealer_cards].each do |card| %>
+  <li><%= card.to_s %></li>
+<% end %>
+</ul>
+Dealer total is: <%= @dealer_total.to_s %>
+
+<br/>
+<br/>
+
 Your current balance is $<%= session[:bank] %>
 <br/>
 
@@ -11,13 +22,11 @@ Your cards are:
 <% end %>
 </ul>
 Your total is: <%= @player_total.to_s %>
+<br/>
 
-<br/>
-<br/>
-Dealer cards are:
-<ul>
-  <% session[:dealer_cards].each do |card| %>
-  <li><%= card.to_s %></li>
-<% end %>
-</ul>
-Dealer total is:
+<form action='/hit' method='post'>
+  <input value='Hit' type='submit' class='btn btn-danger'/>
+</form>
+<form action='/stay' method='post'>
+  <input value='Stay' type='submit' class='btn btn-success'/>
+</form>
