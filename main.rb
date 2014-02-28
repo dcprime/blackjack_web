@@ -48,13 +48,7 @@ helpers do
   end
 
   def busted? cards
-    calculate_total(cards) > 21
-  end
-
-  def dealer_sequence cards
-    if calculate_total(cards) < DEALER_MIN
-      session[:dealer_cards] << session[:deck].pop
-    end
+    calculate_total(cards) > BLACKJACK_AMOUNT
   end
 
 # End helpers method declarations
@@ -89,23 +83,35 @@ get '/game' do
     session[:dealer_cards] << session[:deck].pop
     session[:player_cards] << session[:deck].pop
   end
+  @player_turn = true
+  @player_bust = false
+  @selection = false
+  @compare = false
   erb :game
 end
 
 post '/hit' do
   session[:player_cards] << session[:deck].pop
   @player_busted = busted? session[:player_cards]
+    if @player_busted
+      @player_turn = false
+      @selection = true
+      @compare = false
+    end
   erb :game
 end
 
 post '/stay' do
-
-  # Dealer turn goes here
-  redirect '/dealer_turn'
+  @player_turn = false
+  erb :game
 end
 
-get '/dealer_turn' do
-  dealer_sequence session[:dealer_cards]
-
+post '/dealer_hit' do
+  session[:dealer_cards] << session[:deck].pop
+  if busted? session[:dealer_cards]
+    @selection = true
+  elsif calculate_total(session[:dealer_cards]) >= DEALER_MIN
+    @compare = true
+  end
   erb :game
 end

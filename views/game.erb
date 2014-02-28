@@ -1,22 +1,57 @@
 <h1>Blackjack!</h1>
-<h4>Good luck <%= session[:username] %>!</h4>
 
+<!-- Status bar alerts and instructions -->
 <% if @player_busted %>
-  <h3>Sorry, you busted! Better luck next time!</h3>
+  <div class="alert alert-error"><strong>Status:</strong> Sorry <strong><%= session[:username] %></strong>, you busted!</div>
+<% elsif @player_turn %>
+  <div class="alert alert-success"><strong>Status:</strong> Please select <strong>Hit</strong> or <strong>Stay</strong> below. Good luck <strong><%= session[:username] %></strong>!</div>
+<% elsif calculate_total(session[:dealer_cards]) > BLACKJACK_AMOUNT %>
+  <div class="alert alert-success"><strong>Status:</strong> Dealer busted! You win, <strong><%= session[:username] %></strong>!</div>
+<% elsif calculate_total(session[:dealer_cards]) < DEALER_MIN %>
+  <div class="alert alert-success"><strong>Status:</strong> Dealer has less than 17, <strong><%= session[:username] %></strong>. Click button below for next dealer card.</div>
+<% elsif @compare %>
+  <% if calculate_total(session[:player_cards]) > calculate_total(session[:dealer_cards]) %>
+    <div class="alert alert-success"><strong>Status:</strong> You have the higher hand! You win, <strong><%= session[:username] %></strong>!</div>
+  <% elsif calculate_total(session[:player_cards]) < calculate_total(session[:dealer_cards]) %>
+    <div class="alert alert-error"><strong>Status:</strong> Dealer has the higher hand! Sorry <strong><%= session[:username] %></strong>, you lose!</div>
+  <% else %>
+    <div class="alert alert-success"><strong>Status:</strong> It's a tie game, <strong><%= session[:username] %></strong>! Imagine that!</div>
+  <% end %>
+<% else %>
+  <div class="alert alert-error"><strong>Status:</strong> Something screwy has happened with the calculations, <strong><%= session[:username] %></strong>. Check that code again!</div>
 <% end %>
 
+<!-- Toggle for selection to play again or not -->
+<% if @selection %>
+  <p>Play again message</p>
+<% end %>
+
+<!-- Dealer card display area -->
 Dealer cards are:
 <ul>
-  <% session[:dealer_cards].each do |card| %>
-  <li><%= card.to_s %></li>
+  <% if @player_turn %>
+    <% card = session[:dealer_cards][0] %>
+    <li><%= card.to_s %></li>
+    <li>[hidden card]</li>
+  <% else %>
+    <% session[:dealer_cards].each do |card| %>
+    <li><%= card.to_s %></li>
+    <% end %>
   <% end %>
 </ul>
-Dealer total is: <%= ( (calculate_total(session[:dealer_cards])) - (hidden_card)).to_s %>
+
+<!-- Dealer total display area -->
+<% if @player_turn %>
+  Dealer total is: <%= ( (calculate_total(session[:dealer_cards])) - (hidden_card)).to_s %>
+<% else %>
+  Dealer total is: <%= calculate_total(session[:dealer_cards]).to_s %>
+<% end %>
 
 <br/>
-<br/>
 
-Your current balance is $<%= session[:bank] %>
+<% if !@player_turn && (calculate_total(session[:dealer_cards]) < DEALER_MIN) %>
+
+<% end %>
 <br/>
 
 Your cards are:
@@ -27,10 +62,12 @@ Your cards are:
 </ul>
 Your total is: <%= (calculate_total(session[:player_cards])).to_s %>
 <br/>
+<br/>
 
-<form action='/hit' method='post'>
-  <input value='Hit' type='submit' class='btn btn-danger'/>
-</form>
+<p>Your options are to:</p>
+<form action='/hit' method='post'> 
+  <input value='Hit' type='submit' class='btn btn-danger'/> or
+</form> 
 <form action='/stay' method='post'>
   <input value='Stay' type='submit' class='btn btn-success'/>
 </form>
