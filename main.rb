@@ -51,6 +51,20 @@ helpers do
     calculate_total(cards) > BLACKJACK_AMOUNT
   end
 
+  def dealer_sequence
+  @player_turn = false
+    if busted? session[:dealer_cards]
+      @selection = true
+      @compare = false
+    elsif calculate_total(session[:dealer_cards]) < DEALER_MIN
+      @selection = false
+      @compare = false
+    else # Dealer's hand is between 17 and 21
+      @selection = true
+      @compare = true
+    end
+  end
+
 # End helpers method declarations
 end
 
@@ -72,14 +86,12 @@ post '/set_name' do
 end
 
 get '/game' do
-  if !session[:player_cards]
-    suits = ['H', 'D', 'S', 'C']
-    values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-    session[:deck] = values.product(suits).shuffle!
-    session[:player_cards] = []
-    session[:dealer_cards] = []
-    session[:dealer_cards] << session[:deck].pop
-    session[:player_cards] << session[:deck].pop
+  suits = ['H', 'D', 'S', 'C']
+  values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
+  session[:deck] = values.product(suits).shuffle!
+  session[:player_cards] = []
+  session[:dealer_cards] = []
+  2.times do
     session[:dealer_cards] << session[:deck].pop
     session[:player_cards] << session[:deck].pop
   end
@@ -97,21 +109,29 @@ post '/hit' do
       @player_turn = false
       @selection = true
       @compare = false
+    else
+      @player_turn = true
+      @selection = false
+      @compare = false
     end
   erb :game
 end
 
 post '/stay' do
-  @player_turn = false
+  dealer_sequence
   erb :game
 end
 
 post '/dealer_hit' do
   session[:dealer_cards] << session[:deck].pop
-  if busted? session[:dealer_cards]
-    @selection = true
-  elsif calculate_total(session[:dealer_cards]) >= DEALER_MIN
-    @compare = true
-  end
+  dealer_sequence
   erb :game
+end
+
+post '/replay' do
+  redirect '/game' 
+end
+
+post '/exit' do
+  erb :exit
 end

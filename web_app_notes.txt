@@ -2,6 +2,7 @@
 @player_turn -> Hit and Stay selectable or faded; Dealer cards all visible or one hidden; Dealer next-card button visible (see also dealer_total)
 @player_bust -> Player bust message in Instruction
 @selection - > Play again message on or off
+@compare ->
 dealer_total < DEALER_MIN -> Instruction: "Dealer has less than 17. [Click for dealer's next card]
 dealer_total >= DEALER_MIN -> compare
 dealer_total == BLACKJACK_AMOUNT -> compare

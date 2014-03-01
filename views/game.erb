@@ -23,7 +23,16 @@
 
 <!-- Toggle for selection to play again or not -->
 <% if @selection %>
-  <p>Play again message</p>
+  <h4>Would you like to play again?</h4>
+  <form id="replay_form" action='/replay' method='post'> 
+  <button type="submit" class="btn"><i class="icon-ok"></i> Yes </button> or
+</form>
+<form id="stay_form" action='/exit' method='post'>
+  <button type="submit" class="btn"><i class="icon-remove"></i> No </button>
+</form>
+<br/>
+<br/>
+<br/>
 <% end %>
 
 <!-- Dealer card display area -->
@@ -42,32 +51,52 @@ Dealer cards are:
 
 <!-- Dealer total display area -->
 <% if @player_turn %>
-  Dealer total is: <%= ( (calculate_total(session[:dealer_cards])) - (hidden_card)).to_s %>
+  Dealer total is: <strong><%= ( (calculate_total(session[:dealer_cards])) - (hidden_card)).to_s %></strong>
 <% else %>
-  Dealer total is: <%= calculate_total(session[:dealer_cards]).to_s %>
+  Dealer total is: <strong><%= calculate_total(session[:dealer_cards]).to_s %></strong>
 <% end %>
 
 <br/>
 
-<% if !@player_turn && (calculate_total(session[:dealer_cards]) < DEALER_MIN) %>
-
+<!-- Dealer next card button code -->
+<% if !@player_busted %>
+  <% if !@player_turn && (calculate_total(session[:dealer_cards]) < DEALER_MIN) %>
+  <form action='/dealer_hit' method='post'> 
+    <button type='submit' class='btn btn-primary'>Click for next dealer card <i class="icon-chevron-right icon-white"></i></button>
+  </form> 
+  <% end %>
 <% end %>
 <br/>
 
+<!-- Player card display area -->
 Your cards are:
 <ul>
 <% session[:player_cards].each do |card| %>
   <li><%= card.to_s %></li>
 <% end %>
 </ul>
-Your total is: <%= (calculate_total(session[:player_cards])).to_s %>
+
+<!-- Player total display area -->
+Your total is: <strong><%= (calculate_total(session[:player_cards])).to_s %></strong>
 <br/>
 <br/>
 
-<p>Your options are to:</p>
-<form action='/hit' method='post'> 
-  <input value='Hit' type='submit' class='btn btn-danger'/> or
-</form> 
-<form action='/stay' method='post'>
-  <input value='Stay' type='submit' class='btn btn-success'/>
-</form>
+<!-- Display for Hit and Stay buttons -->
+<% if @player_turn %>
+  <p>Your options are to:</p>
+  <form id="hit_form" action='/hit' method='post'> 
+    <button type="submit" class="btn btn-danger"><i class="icon-hand-down icon-white"></i> Hit </button> or
+  </form>
+  <form id="stay_form" action='/stay' method='post'>
+    <button type="submit" class="btn btn-success"><i class="icon-thumbs-up icon-white"></i> Stay </button>
+  </form>
+
+<% else %>
+  <p>Player turn is finished</p>
+  <form id="hit_form"> 
+    <button type="button" class="btn btn-danger disabled" disabled="disabled"><i class="icon-hand-down icon-white"></i> Hit </button> or
+  </form>
+  <form id="stay_form">
+    <button type="button" class="btn btn-success disabled" disabled="disabled"><i class="icon-thumbs-up icon-white"></i> Stay </button>
+  </form>
+<% end %>
