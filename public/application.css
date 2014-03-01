@@ -12,3 +12,11 @@ form#replay_form {
   margin-right: 5px;
   margin-left: 40px;
 }
+
+div.card_display {
+  margin: 0 auto;
+}
+
+img.card_display {
+  margin: 3px 10px 3px 10px;
+}

@@ -36,18 +36,20 @@
 <% end %>
 
 <!-- Dealer card display area -->
-Dealer cards are:
-<ul>
-  <% if @player_turn %>
-    <% card = session[:dealer_cards][0] %>
-    <li><%= card.to_s %></li>
-    <li>[hidden card]</li>
-  <% else %>
-    <% session[:dealer_cards].each do |card| %>
-    <li><%= card.to_s %></li>
+<div class="well well-small">
+  <h4>Dealer cards are:</h4>
+  <div class="card_display">
+    <% if @player_turn %>
+      <% card = session[:dealer_cards][0] %>
+      <%= get_image(card) %>
+      <img src="/images/cards/cover.jpg" class='card_display' width='84' hight='122'>
+    <% else %>
+      <% session[:dealer_cards].each do |card| %>
+      <%= get_image(card) %>
+      <% end %>
     <% end %>
-  <% end %>
-</ul>
+  </div>
+</div>
 
 <!-- Dealer total display area -->
 <% if @player_turn %>
@@ -69,12 +71,14 @@ Dealer cards are:
 <br/>
 
 <!-- Player card display area -->
-Your cards are:
-<ul>
-<% session[:player_cards].each do |card| %>
-  <li><%= card.to_s %></li>
-<% end %>
-</ul>
+<div class="well well-small">
+  <h4>Your cards are:</h4>
+  <div class="card_display">
+    <% session[:player_cards].each do |card| %>
+      <%= get_image(card) %>
+    <% end %>
+  </div>
+</div>
 
 <!-- Player total display area -->
 Your total is: <strong><%= (calculate_total(session[:player_cards])).to_s %></strong>

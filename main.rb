@@ -65,6 +65,26 @@ helpers do
     end
   end
 
+def get_image(card)
+    suit = case card[1]
+        when "C" then 'clubs'
+        when "D" then 'diamonds'
+        when "S" then 'spades'
+        when "H" then 'hearts'
+      end
+
+    value = card[0]
+    if ['J', 'Q', 'K', 'A'].include?(value)
+      value = case card[0]
+        when "J" then 'jack'
+        when "Q" then 'queen'
+        when "K" then 'king'
+        when "A" then 'ace'
+      end 
+    end 
+    "<img src='/images/cards/#{suit}_#{value}.jpg' class='card_display' width='84' hight='122'>"
+  end
+
 # End helpers method declarations
 end
 
