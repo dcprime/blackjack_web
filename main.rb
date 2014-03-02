@@ -82,7 +82,7 @@ def get_image(card)
         when "A" then 'ace'
       end 
     end 
-    "<img src='/images/cards/#{suit}_#{value}.jpg' class='card_display' width='84' hight='122'>"
+    "<img src='/images/cards/#{suit}_#{value}.jpg'   width='84' hight='122'>"
   end
 
 # End helpers method declarations
@@ -101,6 +101,10 @@ get '/set_name' do
 end
 
 post '/set_name' do
+  if params[:username].empty?
+    @error = "Player name cannot be empty! Please enter a name."
+    halt erb(:set_name)
+  end
   session[:username] = params[:username]
   redirect '/game'
 end
