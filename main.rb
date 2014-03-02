@@ -31,7 +31,7 @@ helpers do
   end
 
   def dealer_2nd_card dealer_cards
-    second_card = dealer_cards[1]
+    dealer_cards[1]
   end
 
   def hidden_card
