@@ -1,0 +1,51 @@
+1. What is HTML? What is CSS? What is Javascript?
+
+HTML - HyperText Markup Language: Used to add elements to a web page.
+CSS - Cascading Style Sheet: Used to set style and formatting for HTML elements.
+Javascript - A scripting language allowing code embedded in webpages to execute logic from the server side.
+
+2. What are the major parts of an HTTP request?
+
+Method (Get, Post, etc.), URI, Header & Body
+
+3. What are the major parts of an HTTP response?
+
+Status code (200, 302, etc.), Header, & Body
+
+4. How do you submit an HTTP POST request, with a "username" attribute set to "bob"? What if we wanted a GET request instead?
+
+A POST request is typically submitted through a form, and in the body of the message would be "username=bob" as a key-value pair. A GET request comes through the URL, with parameters appearing after the "?" in the URL.
+
+5. Why is it important for us, as web developers, to understand that HTTP is a "stateless" protocol?
+
+Because data is completely refreshed with every HTTP request, and therefore we need to use special techniques to save data between requests (such as using Cookies or writing to a database).
+
+6. If the internet is just HTTP requests/responses, why do we only use browsers to interface with web applications? Are there any other options?
+
+Yes, there are other ways to interface with web applications. Any program that has access to HTTP protocol can interact with web applications, in theory. For instance, there may be web applications that coordinate traffic signals across a city that communicate via HTTP without using browser software.
+
+7. What is MVC, and why is it important?
+
+MVC is Model-View-Controller. It is important since it is the model that almost all modern GUI interfaces are based on. It separates the layers between the logic (model), the display of the information (view), and the system taking requests and issuing responses (controller). In our own blackjack project, the Model is Ruby and ERB, the View is HTML/CSS, and the Controller is the Sinatra software.
+
+The below questions are about Sinatra:
+
+1. At a high level, how are requests processed?
+
+Requests are processed using HTTP. Sinatra receives a request from a web browser or form, and issues the appropriate response based on the logic in the Ruby code.
+
+2. In the controller/action, what's the difference between rendering and redirecting?
+
+Rendering is a request to build/rebuild the requested display (a webpage). A redirect is a request to follow a particular route to execute some logic from the model, which often involved a render request at the end of the route. The URL is altered during a redirect, while it stays the same for a simple render.
+
+3. In the ERB view template, how do you show dynamic content?
+
+Ruby code is issued between particular tags: <% Ruby content %>. If you want the content of the Ruby code displayed, the tags include an '=' sign: <%= Ruby content %>
+
+4. Given what you know about ERB templates, when do you suppose the ERB template is turned into HTML?
+
+I would suppose that the template is turned into HTML after the Ruby code has been processed and right before Sinatra sends the response to the requester.
+
+5. What's the role of instance variables in Sinatra?
+
+Instance variables in Sinatra can act as filters for displaying content based on certain conditions. The conditions are met by modifying the content of the instance variables, based on conditional statements in the ERB template.
