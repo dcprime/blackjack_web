@@ -6,6 +6,7 @@ set :sessions, true
 
 BLACKJACK_AMOUNT = 21
 DEALER_MIN = 17
+BANK_START = 500
 
 helpers do
 
@@ -39,6 +40,8 @@ helpers do
     card = dealer_2nd_card(session[:dealer_cards]).to_s
     if card[2] == "A"
       value = 11
+    elsif card[2] == "1"
+      value = 10
     elsif card[2].to_i == 0
       value = 10
     else
@@ -89,8 +92,9 @@ def get_image(card)
 end
 
 get '/' do
+  session[:player_bank] = BANK_START
   if session[:username]
-    redirect '/game'
+    redirect '/newgame'
   else
     redirect '/set_name'
   end
@@ -106,10 +110,10 @@ post '/set_name' do
     halt erb(:set_name)
   end
   session[:username] = params[:username]
-  redirect '/game'
+  redirect '/newgame'
 end
 
-get '/game' do
+get '/newgame' do
   suits = ['H', 'D', 'S', 'C']
   values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
   session[:deck] = values.product(suits).shuffle!
@@ -118,6 +122,30 @@ get '/game' do
   2.times do
     session[:dealer_cards] << session[:deck].pop
     session[:player_cards] << session[:deck].pop
+  end
+  redirect '/bet'
+end
+
+get '/bet' do
+  if session[:player_bank] == 0
+    redirect '/broke'
+  end
+  erb :bet
+end
+
+post '/bet' do
+  if session[:player_bank] == 0
+    redirect '/broke'
+  end
+  if params[:bet_amount].to_i == 0
+    @error = "Bet amount must be greater than zero! Please try again."
+    halt erb(:bet)
+  elsif params[:bet_amount].to_i > session[:player_bank]
+    @error = "You cannot bet more than your current balance! Please try again."
+    halt erb(:bet)
+  else
+    session[:bet_amount] = params[:bet_amount].to_i
+    session[:player_bank] = session[:player_bank] - params[:bet_amount].to_i
   end
   @player_turn = true
   @player_bust = false
@@ -153,9 +181,20 @@ post '/dealer_hit' do
 end
 
 post '/replay' do
-  redirect '/game' 
+  redirect '/newgame' 
+end
+
+get '/restart' do
+  session[:player_bank] = BANK_START
+  redirect '/newgame'
+end
+
+get '/broke' do
+  erb :broke
 end
 
 post '/exit' do
   erb :exit
 end
+
+# Create yes/no buttons on broke page

@@ -6,15 +6,18 @@
 <% elsif @player_turn %>
   <div class="alert alert-success"><strong>Status:</strong> Please select <strong>Hit</strong> or <strong>Stay</strong> below. Good luck <strong><%= session[:username] %></strong>!</div>
 <% elsif calculate_total(session[:dealer_cards]) > BLACKJACK_AMOUNT %>
+  <% session[:player_bank] = session[:player_bank] + (session[:bet_amount] * 2) %>
   <div class="alert alert-success"><strong>Status:</strong> Dealer busted! You win, <strong><%= session[:username] %></strong>!</div>
 <% elsif calculate_total(session[:dealer_cards]) < DEALER_MIN %>
   <div class="alert alert-success"><strong>Status:</strong> Dealer has less than 17, <strong><%= session[:username] %></strong>. Click button below for next dealer card.</div>
 <% elsif @compare %>
   <% if calculate_total(session[:player_cards]) > calculate_total(session[:dealer_cards]) %>
+  <% session[:player_bank] = session[:player_bank] + (session[:bet_amount] * 2) %>
     <div class="alert alert-success"><strong>Status:</strong> You have the higher hand! You win, <strong><%= session[:username] %></strong>!</div>
   <% elsif calculate_total(session[:player_cards]) < calculate_total(session[:dealer_cards]) %>
     <div class="alert alert-error"><strong>Status:</strong> Dealer has the higher hand! Sorry <strong><%= session[:username] %></strong>, you lose!</div>
   <% else %>
+  <% session[:player_bank] = session[:player_bank] + session[:bet_amount] %>
     <div class="alert alert-success"><strong>Status:</strong> It's a tie game, <strong><%= session[:username] %></strong>! Imagine that!</div>
   <% end %>
 <% else %>
@@ -81,9 +84,8 @@
 </div>
 
 <!-- Player total display area -->
-Your total is: <strong><%= (calculate_total(session[:player_cards])).to_s %></strong>
-<br/>
-<br/>
+<p>Your card total is: <strong><%= (calculate_total(session[:player_cards])).to_s %></strong></p>
+<p>Your remaining funds are: <strong>$<%= session[:player_bank].to_s %></strong></p>
 
 <!-- Display for Hit and Stay buttons -->
 <% if @player_turn %>
