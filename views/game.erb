@@ -1,3 +1,5 @@
+<div id='game'>
+
 <h1>Blackjack!</h1>
 
 <!-- Status bar alerts and instructions -->
@@ -28,11 +30,11 @@
 <% if @selection %>
   <h4>Would you like to play again?</h4>
   <form id="replay_form" action='/replay' method='post'> 
-  <button type="submit" class="btn"><i class="icon-ok"></i> Yes </button> or
-</form>
-<form id="stay_form" action='/exit' method='post'>
-  <button type="submit" class="btn"><i class="icon-remove"></i> No </button>
-</form>
+    <button type="submit" class="btn"><i class="icon-ok"></i> Yes </button> or
+  </form>
+  <form id="exit_form" action='/exit' method='post'>
+    <button type="submit" class="btn"><i class="icon-remove"></i> No </button>
+  </form>
 <br/>
 <br/>
 <br/>
@@ -66,7 +68,7 @@
 <!-- Dealer next card button code -->
 <% if !@player_busted %>
   <% if !@player_turn && (calculate_total(session[:dealer_cards]) < DEALER_MIN) %>
-  <form action='/dealer_hit' method='post'> 
+  <form id="dealer_hit_form" action='/dealer_hit' method='post'> 
     <button type='submit' class='btn btn-primary'>Click for next dealer card <i class="icon-chevron-right icon-white"></i></button>
   </form> 
   <% end %>
@@ -74,7 +76,7 @@
 <br/>
 
 <!-- Player card display area -->
-<div class="well well-small">
+<div class="well well-small" id="player_area">
   <h4>Your cards are:</h4>
   <div class="card_display">
     <% session[:player_cards].each do |card| %>
@@ -99,10 +101,11 @@
 
 <% else %>
   <p>Player turn is finished</p>
-  <form id="hit_form"> 
+  <form id="hit_form_disabled"> 
     <button type="button" class="btn btn-danger disabled" disabled="disabled"><i class="icon-hand-down icon-white"></i> Hit </button> or
   </form>
-  <form id="stay_form">
+  <form id="stay_form_disabled">
     <button type="button" class="btn btn-success disabled" disabled="disabled"><i class="icon-thumbs-up icon-white"></i> Stay </button>
   </form>
 <% end %>
+</div>

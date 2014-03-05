@@ -166,18 +166,18 @@ post '/hit' do
       @selection = false
       @compare = false
     end
-  erb :game
+  erb :game, layout: false
 end
 
 post '/stay' do
   dealer_sequence
-  erb :game
+  erb :game, layout: false
 end
 
 post '/dealer_hit' do
   session[:dealer_cards] << session[:deck].pop
   dealer_sequence
-  erb :game
+  erb :game, layout: false
 end
 
 post '/replay' do

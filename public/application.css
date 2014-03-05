@@ -7,10 +7,23 @@ form#stay_form {
   float: left;
 }
 
+form#hit_form_disabled {
+  float: left;
+  margin-right: 5px;
+}
+
+form#stay_form_disabled {
+  float: left;
+}
+
 form#replay_form {
   float: left;
   margin-right: 5px;
   margin-left: 40px;
+}
+
+form#exit_form {
+  float: left;
 }
 
 div.card_display {
