@@ -85,7 +85,7 @@ def get_image(card)
         when "A" then 'ace'
       end 
     end 
-    "<img src='/images/cards/#{suit}_#{value}.jpg'   width='84' hight='122'>"
+    "<img src='/images/cards/#{suit}_#{value}.jpg'   width='84' height='122'>"
   end
 
 # End helpers method declarations
@@ -196,5 +196,3 @@ end
 post '/exit' do
   erb :exit
 end
-
-# Create yes/no buttons on broke page
